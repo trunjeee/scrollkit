@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: file:; frame-src 'self' file:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ScrollKit</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header id="top">
+  <div class="brand"><span class="logo"></span>ScrollKit</div>
+  <div class="grow"></div>
+  <button id="btnOpen" class="ghost"></button>
+  <button id="btnSave" class="ghost"></button>
+  <select id="lang" class="mini"><option value="ru">RU</option><option value="en">EN</option></select>
+</header>
+<main>
+  <aside id="side"></aside>
+  <section id="stageWrap">
+    <div id="pvBar">
+      <div class="seg" id="devSeg"></div>
+      <label class="chk"><input type="checkbox" id="touchEmu"><span id="touchLbl"></span></label>
+      <div class="grow"></div>
+      <label class="scrub"><span id="scrubLbl"></span><input type="range" id="scrub" min="0" max="1000" value="0"></label>
+      <span id="pvInfo" class="info"></span>
+    </div>
+    <div id="pvBox">
+      <div id="pvFrameWrap"><iframe id="pv" src="preview.html"></iframe></div>
+      <div id="pvEmpty"><div class="drop"><div class="big">⬇</div><div id="dropTxt"></div><button id="btnPick" class="primary"></button></div></div>
+      <div id="pvBusy" hidden><div class="spin"></div><span id="pvBusyTxt"></span></div>
+    </div>
+  </section>
+</main>
+<script src="../shared/config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

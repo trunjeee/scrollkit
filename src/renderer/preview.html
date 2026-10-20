@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{margin:0;background:#121216;color:#cfcfd6;font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+  .pad{height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#6d6d78;padding:24px}
+  #sk [data-sk-from]{position:absolute;left:6%;bottom:10%;max-width:60%;font-size:clamp(16px,3vw,32px);color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6);opacity:0;transform:translateY(10px);transition:.4s}
+  #sk [data-sk-from].sk-active{opacity:1;transform:none}
+  #sk{color:#fff}
+</style></head>
+<body>
+<div class="pad" id="top">↓</div>
+<div id="sk"><div data-sk-from="0.2" data-sk-to="0.6">Overlay · 20–60%</div></div>
+<div class="pad" id="bot">⌂</div>
+<script src="../../runtime/scrollkit.js"></script>
+<script>
+  var inst = null, el = document.getElementById('sk');
+  window.addEventListener('message', function (e) {
+    var m = e.data || {};
+    if (m.t === 'cfg') {
+      var opts = { base: m.base, forceTouch: !!m.touch };
+      if (inst) { inst.opts = opts; inst.update(m.cfg); }
+      else inst = ScrollKit.init(el, m.cfg, opts);
+    } else if (m.t === 'scrub' && inst) inst.setProgress(m.v);
+    else if (m.t === 'texts') { document.getElementById('top').textContent = m.top; document.getElementById('bot').textContent = m.bot; }
+  });
+  el.addEventListener('scrollkit:progress', function (e) {
+    parent.postMessage({ t: 'progress', frame: e.detail.frame, n: inst ? inst.n : 0, p: e.detail.progress }, '*');
+  });
+  parent.postMessage({ t: 'ready' }, '*');
+</script>
+</body></html>
