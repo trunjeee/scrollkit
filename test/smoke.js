@@ -9,19 +9,21 @@ module.exports = async function smoke(win) {
   const shot = async (n) => fs.writeFileSync(path.join(out, n + '.png'), (await wc.capturePage()).toPNG());
   const ex = (code) => wc.executeJavaScript(code);
   await sleep(1500);
-  await shot('01-empty');
-  await ex(`window.__setVideo && 1`);
-  await ex(`(async()=>{ const r = await window.__test.load(${JSON.stringify(process.env.SK_VIDEO)}); return r; })()`);
-  await sleep(6000);
-  await shot('02-loaded');
+  await ex(`window.__test.load(${JSON.stringify(process.env.SK_VIDEO)})`);
+  await sleep(9000);
   const pvf = wc.mainFrame.frames.find((f) => f.url.includes('preview.html'));
-  if (pvf) {
-    await pvf.executeJavaScript(`window.scrollTo(0, innerHeight*2.2)`);
-    await sleep(1200);
-    await shot('03-scrolled');
-    console.log('PV', await pvf.executeJavaScript(`JSON.stringify({n:ScrollKit.instances[0]&&ScrollKit.instances[0].n,loaded:ScrollKit.instances[0]&&ScrollKit.instances[0].loaded,cur:ScrollKit.instances[0]&&ScrollKit.instances[0]._cur, errs: window.__errs})`));
-  }
-  const logs = await ex(`JSON.stringify(window.__errs||[])`);
-  console.log('ERRS', logs);
+  await pvf.executeJavaScript(`window.scrollTo(0, innerHeight*2.3)`);
+  await sleep(1500);
+  await shot('main');
+  await ex(`document.getElementById('side').scrollTop = 1250`);
+  await sleep(400);
+  await shot('animation');
+  await ex(`document.querySelectorAll('#devSeg button')[2].click()`);
+  await sleep(1500);
+  await ex(`document.getElementById('side').scrollTop = 0`);
+  await pvf.executeJavaScript(`window.scrollTo(0, innerHeight*1.8)`);
+  await sleep(1500);
+  await shot('mobile');
+  console.log('ERRS', await ex(`JSON.stringify(window.__errs||[])`));
   process.exit(0);
 };
