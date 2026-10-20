@@ -417,10 +417,10 @@ async function buildPreview() {
   $('#pvBusy').hidden = false; $('#pvBusyTxt').textContent = tr(UI.building);
   const common = { start: S.trim.start, end: S.trim.end, format: 'jpg' };
   const jobs = [];
-  jobs.push(api.buildPreview({ kind: 'desktop', rid, o: { ...common, input: S.src.desktop, srcDuration: S.info.desktop.duration, mode: S.d.mode, count: S.d.count, fps: S.d.fps, width: 720 } }).then((r) => ['desktop', r]));
+  jobs.push(api.buildPreview({ kind: 'desktop', rid, o: { ...common, input: S.src.desktop, srcDuration: S.info.desktop.duration, mode: S.d.mode, count: S.d.count, fps: S.d.fps, width: Math.min(S.d.width, 1440) } }).then((r) => ['desktop', r]));
   if (S.m.enabled) {
     const own = S.m.source === 'file' && S.src.mobile && S.info.mobile;
-    jobs.push(api.buildPreview({ kind: 'mobile', rid, o: { ...common, input: own ? S.src.mobile : S.src.desktop, srcDuration: own ? S.info.mobile.duration : S.info.desktop.duration, mode: S.m.mode, count: S.m.count, fps: S.m.fps, width: 400, crop: { aspect: S.m.aspect, x: S.m.cropX, y: S.m.cropY } } }).then((r) => ['mobile', r]));
+    jobs.push(api.buildPreview({ kind: 'mobile', rid, o: { ...common, input: own ? S.src.mobile : S.src.desktop, srcDuration: own ? S.info.mobile.duration : S.info.desktop.duration, mode: S.m.mode, count: S.m.count, fps: S.m.fps, width: Math.min(S.m.width, 720), crop: { aspect: S.m.aspect, x: S.m.cropX, y: S.m.cropY } } }).then((r) => ['mobile', r]));
   } else live.mobile = null;
   const res = await Promise.all(jobs);
   if (rid !== live.rid) return;

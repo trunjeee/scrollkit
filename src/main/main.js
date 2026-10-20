@@ -80,7 +80,7 @@ ipcMain.handle('preview:build', async (_e, req) => {
   previewJobs[kind] = ac;
   const outDir = path.join(previewRoot, kind + '-' + rid);
   try {
-    const r = await ff.extractFrames({ ...req.o, outDir, format: 'jpg', quality: 62, signal: ac.signal, maxCount: 300,
+    const r = await ff.extractFrames({ ...req.o, outDir, format: 'jpg', quality: 85, signal: ac.signal, maxCount: 300,
       onProgress: (p) => win && win.webContents.send('preview:progress', { kind, p }) });
     // clean older dirs of this kind
     for (const d of await fs.promises.readdir(previewRoot).catch(() => [])) {
